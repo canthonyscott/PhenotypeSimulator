@@ -99,8 +99,9 @@ addNonNulls <- function(compList) {
 #' cat_uniform <- simulateDist(x=10, dist="cat_unif", categories=5)
 #' uniform <- simulateDist(x=10, dist="unif", m=4, std=1)
 #' binomial <- simulateDist(x=10, dist="bin", prob=0.4)
+#' geom <- simulateDist(x=10, dist="geom", m=0.25) m in this case is probability of the geometic function
 simulateDist <- function(x, 
-                         dist=c("unif", "norm", "bin", "cat_norm", "cat_unif"), 
+                         dist=c("unif", "norm", "bin", "cat_norm", "cat_unif", "geom"), 
                          m=NULL, std=1, categories=NULL, prob=NULL) {
     if (x < 0) {
         stop(paste("The number of observations to simulate (", x, ") has ",
@@ -180,7 +181,10 @@ simulateDist <- function(x,
         }
         d = sample(1:categories, x, replace=TRUE, prob=prob)
         d <- as.numeric(d)
-    } else {
+    } else if (dist == "geom") {
+        d <- rgeom(x, m)
+        d <- d + 1
+    }else {
         stop("Unknown distribution")
     }
     return(d)
