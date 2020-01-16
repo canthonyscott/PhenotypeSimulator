@@ -28,9 +28,9 @@
 #' @param keepSameIndependent [boolean] If set to TRUE, the independent genetic 
 #' effects always influence the same subset of traits.
 #' @param distBeta Vector of name(s) [string] of distribution to use to simulate 
-#' effect sizes of SNPs; one of "unif" or "norm".
+#' effect sizes of SNPs; one of "unif", "norm" or "geom".
 #' @param mBeta Vector of mean/midpoint(s) [double] of normal/uniform 
-#' distribution for effect sizes of SNPs.
+#' distribution for effect sizes of SNPs. Probability [double] of the geometric distribution.
 #' @param sdBeta Vector of standard deviation/distance from midpoint [double] 
 #' of normal/uniform distribution for effect sizes of SNPs.
 #' @param verbose [boolean] If TRUE, progress info is printed to standard out
@@ -139,6 +139,11 @@ geneticFixedEffects <- function(X_causal, P, N, phenoID="Trait_",
                                          m=mBeta, std=sdBeta) %*% 
                 t(abs(simulateDist(traitsAffected, dist=distBeta, m=0, 
                                    std=1)))
+        }
+        if (distBeta == "geom") {
+            betaX_shared <- simulateDist(NrSharedSNPs,  dist=distBeta, 
+                                         m=mBeta) %*% 
+                t(abs(simulateDist(traitsAffected, dist=distBeta, m=mBeta)))
         }
         
         if (P != traitsAffected) {
