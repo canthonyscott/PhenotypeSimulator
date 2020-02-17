@@ -141,9 +141,8 @@ geneticFixedEffects <- function(X_causal, P, N, phenoID="Trait_",
                                    std=1)))
         }
         if (distBeta == "geom") {
-            betaX_shared <- simulateDist(NrSharedSNPs,  dist=distBeta, 
-                                         m=mBeta) %*% 
-                t(abs(simulateDist(traitsAffected, dist=distBeta, m=mBeta)))
+            vals <- simulateDist((NrSharedSNPs * traitsAffected), dist=distBeta, m=mBeta)
+            betaX_shared <- matrix(vals, NrSharedSNPs, traitsAffected)
         }
         
         if (P != traitsAffected) {
