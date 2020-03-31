@@ -740,7 +740,7 @@ runSimulation <- function(N, P,
                           customTransform=NULL, transformNeg="abs",
                           proportionNonlinear=0,
                           sampleID="ID_", phenoID="Trait_", snpID="SNP_",
-                          seed=219453, verbose=FALSE) {
+                          seed=219453, verbose=FALSE, mysnps=NULL) {
 
     vmessage(c("Set seed:", seed), verbose=verbose)
     set.seed(seed)
@@ -827,7 +827,8 @@ runSimulation <- function(N, P,
                                         id_phenos=id_phenos,
                                         id_samples=id_samples,
                                         phenoID=phenoID,
-                                        verbose=verbose)
+                                        verbose=verbose,
+                                        mysnps=mysnps)
 
         var_genFixed_shared <- model$theta * model$h2s * model$genVar
         var_genFixed_independent <- (1 - model$theta) * model$h2s * model$genVar

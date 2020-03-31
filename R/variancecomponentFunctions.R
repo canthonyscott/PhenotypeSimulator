@@ -53,7 +53,7 @@ geneticFixedEffects <- function(X_causal, P, N, phenoID="Trait_",
                                 pTraitIndependentGenetic=0.2, 
                                 keepSameIndependent=FALSE,
                                 distBeta="norm", mBeta=0, sdBeta=1, 
-                                verbose=FALSE) {
+                                verbose=FALSE, mysnps=NULL) {
     numbers <- list(P=P, N=N, mBeta=mBeta, sdBeta=sdBeta,
                     pIndependentGenetic=pIndependentGenetic, 
                     pTraitIndependentGenetic=pTraitIndependentGenetic, 
@@ -141,7 +141,18 @@ geneticFixedEffects <- function(X_causal, P, N, phenoID="Trait_",
                                    std=1)))
         }
         if (distBeta == "geom") {
-            vals <- simulateDist((NrSharedSNPs * traitsAffected), dist=distBeta, m=mBeta)
+            if (mysnps != NULL){
+                # Read in the csv file and get the SNP effects
+                snp_data = read.csv(mysnps)
+                colnames(snp_data) <- c("snpid","effect")
+                vals <- snp_data$effect
+                # If doing more than one trait, upsample these SNP effects
+                if (traitsAffected > 1){
+                    vals = sample(vals, nrow(text) * traitsAffected)
+                }
+            } else {
+                vals <- simulateDist((NrSharedSNPs * traitsAffected), dist=distBeta, m=mBeta)
+            }
             betaX_shared <- matrix(vals, NrSharedSNPs, traitsAffected)
         }
         
