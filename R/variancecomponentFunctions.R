@@ -141,7 +141,7 @@ geneticFixedEffects <- function(X_causal, P, N, phenoID="Trait_",
                                    std=1)))
         }
         if (distBeta == "geom") {
-            if (mysnps != NULL){
+            if (!is.null(mysnps)){
                 # Read in the csv file and get the SNP effects
                 snp_data = read.csv(mysnps)
                 colnames(snp_data) <- c("snpid","effect")
